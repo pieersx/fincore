@@ -1,0 +1,47 @@
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Editors and IDEs
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+secrets/
+.aws/
+*.key
+*.pem
+*.p12
+*.jks
+
+# Java and Maven
+**/target/
+
+# Node.js and pnpm
+**/node_modules/
+.pnpm-store/
+**/dist/
+**/coverage/
+
+# End-to-end tests
+**/playwright-report/
+**/test-results/
+
+# Terraform local state
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# Logs and temporary files
+*.log
+*.pid
+*.tmp

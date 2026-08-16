@@ -1,0 +1,16 @@
+# Use Linux line endings for text files
+* text=auto eol=lf
+
+# Windows scripts require Windows line endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files must not be modified as text
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.jar binary
