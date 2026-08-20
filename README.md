@@ -13,8 +13,8 @@ eventos, servicios independientes, AWS y Kubernetes.
 ## Estado del proyecto
 
 FinCore se encuentra en la fase de *walking skeleton*. El backend ya puede
-compilarse, ejecutarse y probarse; los módulos financieros, PostgreSQL y el
-frontend se incorporarán en incrementos posteriores.
+compilarse, ejecutarse y probarse contra PostgreSQL; los módulos financieros y
+el frontend se incorporarán en incrementos posteriores.
 
 ## Objetivo
 
@@ -129,6 +129,8 @@ Las versiones principales están fijadas en `mise.toml` y `package.json`.
 
 ```bash
 mise install
+docker compose up -d postgres
+docker compose ps
 mise exec -- zsh -c 'cd backend && ./mvnw test'
 mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
 ```
@@ -136,7 +138,15 @@ mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
 Con la aplicación iniciada, el endpoint de salud estará disponible en
 `http://localhost:8080/actuator/health`.
 
-Docker será necesario a partir del incremento de persistencia con PostgreSQL.
+Las pruebas crean una instancia desechable de PostgreSQL mediante Testcontainers.
+La aplicación local utiliza el servicio definido en `compose.yaml` y aplica las
+migraciones de Flyway durante el arranque.
+
+Para detener los servicios locales sin eliminar los datos:
+
+```bash
+docker compose down
+```
 
 ## Seguridad
 
