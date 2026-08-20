@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: fincore-backend
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: FinCore
+    description: Educational financial core simulator

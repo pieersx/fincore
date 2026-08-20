@@ -12,15 +12,9 @@ eventos, servicios independientes, AWS y Kubernetes.
 
 ## Estado del proyecto
 
-FinCore se encuentra actualmente en la fase de fundamentos.
-
-Todavía no existe una aplicación ejecutable. En esta etapa se están definiendo:
-
-- Alcance del producto.
-- Lenguaje del dominio financiero.
-- Decisiones de arquitectura.
-- Estándares del repositorio.
-- Entorno reproducible de desarrollo.
+FinCore se encuentra en la fase de *walking skeleton*. El backend ya puede
+compilarse, ejecutarse y probarse; los módulos financieros, PostgreSQL y el
+frontend se incorporarán en incrementos posteriores.
 
 ## Objetivo
 
@@ -113,6 +107,7 @@ producto inicial.
 - [Alcance de v1.0.0](docs/PRODUCT_SCOPE.md).
 - [Glosario del dominio](docs/DOMAIN_GLOSSARY.md).
 - [Diagrama de arquitectura](docs/architecture/fincore-evolution.png).
+- [Guía de contribución](CONTRIBUTING.md).
 
 Las decisiones importantes se documentarán mediante Architecture Decision
 Records dentro de `docs/adr`.
@@ -130,20 +125,18 @@ Records dentro de `docs/adr`.
 
 Las versiones principales están fijadas en `mise.toml` y `package.json`.
 
-## Verificación del entorno
+## Ejecutar el backend
 
 ```bash
 mise install
-java --version
-mise exec -- mvn --version
-node --version
-pnpm --version
-docker --version
-docker compose version
+mise exec -- zsh -c 'cd backend && ./mvnw test'
+mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
 ```
 
-Todavía no existe un comando para iniciar FinCore. Esta sección se actualizará
-cuando se implemente el walking skeleton.
+Con la aplicación iniciada, el endpoint de salud estará disponible en
+`http://localhost:8080/actuator/health`.
+
+Docker será necesario a partir del incremento de persistencia con PostgreSQL.
 
 ## Seguridad
 
