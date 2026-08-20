@@ -1,5 +1,7 @@
 # FinCore
 
+[![Backend CI](https://github.com/pieersx/fincore/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/pieersx/fincore/actions/workflows/backend-ci.yml)
+
 FinCore es un simulador educativo de core financiero desarrollado para demostrar
 ingeniería backend, arquitectura de software, testing, seguridad, DevOps y cloud.
 
@@ -147,6 +149,13 @@ Para detener los servicios locales sin eliminar los datos:
 ```bash
 docker compose down
 ```
+
+## Integración continua
+
+El workflow `Backend CI` ejecuta `./mvnw verify` con Java 21 en cada Pull
+Request dirigido a `main` y después de cada push a esa rama. Las pruebas de
+integración utilizan Testcontainers, por lo que verifican el backend contra una
+instancia desechable de PostgreSQL también dentro de GitHub Actions.
 
 ## Seguridad
 
