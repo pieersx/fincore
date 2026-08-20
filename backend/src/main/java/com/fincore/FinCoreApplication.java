@@ -15,4 +15,3 @@ public class FinCoreApplication {
         SpringApplication.run(FinCoreApplication.class, args);
     }
 }
-
