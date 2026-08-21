@@ -137,7 +137,7 @@ Reglas financieras:
 | Node.js | 24 LTS, fijado con mise | Runtime de herramientas |
 | pnpm | 11.22.0, fijado en `package.json` | Gestión de dependencias |
 | React | 19.2.x | Interfaz de usuario |
-| TypeScript | 7.x | Tipado estático |
+| TypeScript | 6.x, hasta que el ecosistema de lint soporte 7.x | Tipado estático |
 | Vite | 8.x | Desarrollo y build de producción |
 | React Router | Versión estable compatible | Navegación |
 | TanStack Query | Versión estable compatible | Estado del servidor |
@@ -199,7 +199,9 @@ diseñará manualmente la criptografía de tokens.
 - Maven Enforcer.
 - Spotless.
 - ArchUnit.
-- ESLint y Prettier.
+- Oxlint para el análisis estático del frontend.
+- Un formateador automático se incorporará cuando se acuerde y documente su
+  configuración para todo el repositorio.
 - Architecture Decision Records (ADR).
 - OpenAPI.
 - Diagramas de arquitectura C4.
