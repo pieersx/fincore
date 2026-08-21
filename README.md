@@ -1,6 +1,7 @@
 # FinCore
 
 [![Backend CI](https://github.com/pieersx/fincore/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/pieersx/fincore/actions/workflows/backend-ci.yml)
+[![Frontend CI](https://github.com/pieersx/fincore/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/pieersx/fincore/actions/workflows/frontend-ci.yml)
 
 FinCore es un simulador educativo de core financiero desarrollado para demostrar
 ingeniería backend, arquitectura de software, testing, seguridad, DevOps y cloud.
@@ -15,8 +16,9 @@ eventos, servicios independientes, AWS y Kubernetes.
 ## Estado del proyecto
 
 FinCore se encuentra en la fase de *walking skeleton*. El backend ya puede
-compilarse, ejecutarse y probarse contra PostgreSQL; los módulos financieros y
-el frontend se incorporarán en incrementos posteriores.
+compilarse, ejecutarse y probarse contra PostgreSQL. El frontend consulta el
+estado del backend; los módulos financieros se incorporarán en incrementos
+posteriores.
 
 ## Objetivo
 
@@ -105,6 +107,7 @@ producto inicial.
 
 ## Documentación
 
+- [Creación inicial con Vite y Spring Initializr](docs/BOOTSTRAP.md).
 - [Plan de 10 semanas](docs/PROJECT_PLAN.md).
 - [Alcance de v1.0.0](docs/PRODUCT_SCOPE.md).
 - [Glosario del dominio](docs/DOMAIN_GLOSSARY.md).
@@ -126,15 +129,35 @@ Records dentro de `docs/adr`.
 - Git.
 
 Las versiones principales están fijadas en `mise.toml` y `package.json`.
+La [guía de creación inicial](docs/BOOTSTRAP.md) explica qué archivos provinieron
+de los generadores oficiales y qué personalizaciones se añadieron a FinCore.
 
-## Ejecutar el backend
+## Ejecutar la aplicación local
+
+Instala las herramientas y dependencias una vez:
 
 ```bash
 mise install
+pnpm install
+```
+
+Inicia PostgreSQL desde la raíz del repositorio:
+
+```bash
 docker compose up -d postgres
 docker compose ps
-mise exec -- zsh -c 'cd backend && ./mvnw test'
+```
+
+Inicia el backend en una terminal:
+
+```bash
 mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
+```
+
+Inicia el frontend en una segunda terminal:
+
+```bash
+pnpm dev:frontend
 ```
 
 Con la aplicación iniciada, el endpoint de salud estará disponible en
@@ -144,6 +167,19 @@ Las pruebas crean una instancia desechable de PostgreSQL mediante Testcontainers
 La aplicación local utiliza el servicio definido en `compose.yaml` y aplica las
 migraciones de Flyway durante el arranque.
 
+Con el backend en ejecución, el frontend estará disponible en
+`http://localhost:5173`. Vite redirige `/actuator` hacia Spring Boot durante el
+desarrollo local.
+
+Las verificaciones locales pueden ejecutarse sin iniciar manualmente PostgreSQL:
+
+```bash
+mise exec -- zsh -c 'cd backend && ./mvnw verify'
+pnpm lint:frontend
+pnpm test:frontend
+pnpm build:frontend
+```
+
 Para detener los servicios locales sin eliminar los datos:
 
 ```bash
@@ -152,10 +188,10 @@ docker compose down
 
 ## Integración continua
 
-El workflow `Backend CI` ejecuta `./mvnw verify` con Java 21 en cada Pull
-Request dirigido a `main` y después de cada push a esa rama. Las pruebas de
-integración utilizan Testcontainers, por lo que verifican el backend contra una
-instancia desechable de PostgreSQL también dentro de GitHub Actions.
+Los workflows `Backend CI` y `Frontend CI` se ejecutan en cada Pull Request
+dirigido a `main` y después de cada push a esa rama. El backend ejecuta
+`./mvnw verify` con Java 21 y PostgreSQL mediante Testcontainers. El frontend
+ejecuta lint, pruebas y build con Node.js 24 y pnpm.
 
 ## Seguridad
 
