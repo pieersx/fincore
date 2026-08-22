@@ -1,14 +1,15 @@
 package com.fincore;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.modulith.Modulith;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * FinCore application entry point.
+ * Punto de entrada del backend de FinCore.
  *
- * <p>{@link Modulith} marks the direct subpackages of {@code com.fincore} as business modules.
+ * <p>{@link SpringBootApplication} habilita el escaneo de componentes, la
+ * autoconfiguración y la configuración principal de Spring Boot.
  */
-@Modulith(systemName = "FinCore")
+@SpringBootApplication
 public class FinCoreApplication {
 
     public static void main(String[] args) {

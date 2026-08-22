@@ -166,7 +166,7 @@ export default function App() {
               <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] sm:text-4xl">Construido por dominios, no por capas.</h2>
             </div>
             <p className="max-w-md text-sm leading-6 text-[#55706b]">
-              Cada módulo será dueño de sus reglas, sus tablas y sus pruebas dentro del monolito modular.
+              Cada funcionalidad agrupa sus controladores, servicios, repositorios, entidades y DTO.
             </p>
           </div>
 
