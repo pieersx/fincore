@@ -2,7 +2,7 @@
   "name": "fincore",
   "version": "0.1.0",
   "private": true,
-  "description": "Simulador educativo de core financiero construido como monolito modular.",
+  "description": "Simulador educativo de core financiero organizado con Feature + Layers.",
   "license": "MIT",
   "packageManager": "pnpm@11.22.0",
   "engines": {

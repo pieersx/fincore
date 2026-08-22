@@ -65,7 +65,7 @@ Una transferencia y un asiento contable no son el mismo concepto.
 
 Registro completo de un hecho financiero.
 
-En el código se utilizará el nombre `JournalEntry`.
+En el código se utiliza el nombre `LedgerJournal`.
 
 Un asiento contiene dos o más movimientos contables. Dentro de una misma moneda,
 el total de débitos debe ser igual al total de créditos.
@@ -74,7 +74,7 @@ el total de débitos debe ser igual al total de créditos.
 
 Una línea individual de un asiento contable.
 
-En el código se utilizará el nombre `Posting`.
+En el código se utiliza el nombre `LedgerEntry`.
 
 Cada movimiento contiene:
 

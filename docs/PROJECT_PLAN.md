@@ -13,7 +13,7 @@ FinCore es un simulador educativo de core financiero creado para demostrar
 ingeniería backend, arquitectura de software, pruebas, seguridad, DevOps y
 prácticas cloud.
 
-El proyecto comenzará como un monolito modular. Evolucionará hacia eventos
+El proyecto comenzará como un monolito organizado con Feature + Layers. Evolucionará hacia eventos
 asíncronos, un servicio de notificaciones desplegable independientemente,
 infraestructura en AWS y Kubernetes únicamente después de completar la
 arquitectura más sencilla y poder demostrar sus limitaciones.
@@ -52,15 +52,15 @@ regulaciones financieras ni sistema apto para administrar dinero real.
 
 ## 3. Estrategia de arquitectura
 
-El sistema inicial será un único backend desplegable dividido en módulos de
-negocio explícitos:
+El sistema inicial será un único backend desplegable dividido en funcionalidades
+de negocio y capas técnicas explícitas:
 
 ```text
 React y TypeScript
         |
         | HTTPS y REST
         v
-Monolito modular Spring Boot
+Monolito Spring Boot con Feature + Layers
 |-- identity
 |-- customers
 |-- accounts
@@ -74,11 +74,9 @@ Monolito modular Spring Boot
 PostgreSQL
 ```
 
-Los módulos se organizarán por capacidad de negocio y no mediante capas técnicas
-globales. Un módulo puede exponer interfaces de aplicación y eventos, pero los
-detalles internos de su dominio e infraestructura permanecerán privados.
-
-Spring Modulith y las pruebas de arquitectura verificarán estos límites.
+Las features se organizarán por capacidad de negocio y, dentro de cada una, por
+`controller`, `service`, `repository`, `entity`, `dto` y `mapper` cuando sean
+necesarios. No se utilizarán paquetes técnicos globales para mezclar funcionalidades.
 
 ## 4. Stack tecnológico
 
@@ -88,7 +86,6 @@ Spring Modulith y las pruebas de arquitectura verificarán estos límites.
 | --- | --- | --- |
 | Java | 21 LTS, fijado con mise | Lenguaje principal |
 | Spring Boot | 4.1.x | Plataforma de la aplicación |
-| Spring Modulith | 2.1.x | Verificación y documentación modular |
 | Maven Wrapper | 3.9.x | Builds reproducibles |
 | Spring Web MVC | Administrado por Spring Boot | API REST |
 | Spring Data JPA | Administrado por Spring Boot | Persistencia |
@@ -105,7 +102,7 @@ bloqueante solamente para afirmar que el sistema es reactivo. Posteriormente
 podrá añadirse un ejercicio reactivo independiente si existe un caso de uso
 medible.
 
-Las dependencias administradas por los BOM de Spring Boot y Spring Modulith no
+Las dependencias administradas por el BOM de Spring Boot no
 recibirán versiones independientes sin una razón documentada.
 
 ### 4.2 Base de datos y representación financiera
@@ -155,8 +152,6 @@ Pruebas del backend:
 - JUnit.
 - AssertJ.
 - Mockito cuando se justifique utilizar un test double.
-- ArchUnit.
-- Spring Modulith Test.
 - Testcontainers.
 - REST Assured.
 - Pruebas de concurrencia e idempotencia.
@@ -399,7 +394,7 @@ Entregables:
 
 - Modelo de amenazas.
 - Headers de seguridad y revisión de configuración segura.
-- Suites de pruebas unitarias, modulares, de integración, arquitectura y E2E.
+- Suites de pruebas unitarias, de integración y E2E.
 - Jobs de CodeQL, Trivy, formato, pruebas y build en GitHub Actions.
 - Imágenes multi-stage reproducibles.
 - Documentación OpenAPI.
@@ -410,7 +405,7 @@ Criterios de salida:
 
 - CI pasa desde un clon limpio.
 - No permanece ninguna vulnerabilidad crítica conocida sin explicación.
-- El monolito modular está completo y puede desplegarse.
+- El monolito Feature + Layers está completo y puede desplegarse.
 
 Hito profesional:
 
@@ -523,7 +518,7 @@ Hitos previstos:
 - `v0.3.0`: identidad y clientes.
 - `v0.4.0`: cuentas y ledger.
 - `v0.5.0`: transferencias.
-- `v1.0.0`: producto completo como monolito modular.
+- `v1.0.0`: producto completo como monolito Feature + Layers.
 - `v1.1.0`: AWS y observabilidad.
 - `v2.0.0`: outbox y Kafka.
 - `v2.1.0`: servicio de notificaciones.
@@ -569,7 +564,6 @@ resultados medidos, no mediante niveles de habilidad autoasignados.
 ## 10. Referencias
 
 - [Proyecto Spring Boot](https://spring.io/projects/spring-boot)
-- [Referencia de Spring Modulith](https://docs.spring.io/spring-modulith/reference/)
 - [Versiones de React](https://react.dev/versions)
 - [Versiones de Vite](https://vite.dev/releases)
 - [Versiones de Node.js](https://nodejs.org/en/about/previous-releases)

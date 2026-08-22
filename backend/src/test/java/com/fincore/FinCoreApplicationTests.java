@@ -5,31 +5,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fincore.support.PostgreSQLIntegrationTest;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.env.YamlPropertySourceLoader;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Testcontainers
-class FinCoreApplicationTests {
-
-    @Container
-    @ServiceConnection
-    static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6-alpine")
-            .withDatabaseName("fincore_test")
-            .withUsername("fincore")
-            .withPassword("fincore_test");
+class FinCoreApplicationTests extends PostgreSQLIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -57,8 +49,12 @@ class FinCoreApplicationTests {
     }
 
     @Test
-    void moduleStructureIsValid() {
-        ApplicationModules.of(FinCoreApplication.class).verify();
+    void openApiPublishesTheFinancialContracts() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paths['/api/v1/accounts']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/transfers']").exists())
+                .andExpect(jsonPath("$.paths['/api/v1/operations/reconciliation']").exists());
     }
 
     @Test
@@ -71,6 +67,23 @@ class FinCoreApplicationTests {
                 .query(Integer.class)
                 .single();
 
-        assertThat(appliedMigrations).isEqualTo(1);
+        assertThat(appliedMigrations).isEqualTo(6);
+    }
+
+    @Test
+    void baseConfigurationDoesNotEnableDemoIdentitiesOrPublicRegistration() throws Exception {
+        YamlPropertySourceLoader loader = new YamlPropertySourceLoader();
+        PropertySource<?> base = loader
+                .load("application", new ClassPathResource("application.yml"))
+                .getFirst();
+        PropertySource<?> local = loader
+                .load("application-local", new ClassPathResource("application-local.yml"))
+                .getFirst();
+
+        assertThat(base.getProperty("spring.flyway.locations")).isNull();
+        assertThat(base.getProperty("fincore.identity.registration-enabled"))
+                .isEqualTo("${REGISTRATION_ENABLED:false}");
+        assertThat(local.getProperty("spring.flyway.locations"))
+                .isEqualTo("classpath:db/migration,classpath:db/demo");
     }
 }

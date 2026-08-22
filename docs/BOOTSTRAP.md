@@ -65,8 +65,7 @@ Dependencias seleccionadas:
 - Spring Data JPA;
 - Flyway Migration;
 - PostgreSQL Driver;
-- Testcontainers;
-- Spring Modulith.
+- Testcontainers.
 
 El equivalente reproducible desde la terminal es:
 
@@ -82,7 +81,7 @@ curl -fsSLG https://start.spring.io/starter.tgz \
   --data-urlencode packageName=com.fincore \
   --data-urlencode packaging=jar \
   --data-urlencode javaVersion=21 \
-  --data-urlencode dependencies=web,validation,actuator,data-jpa,flyway,postgresql,testcontainers,modulith \
+  --data-urlencode dependencies=web,validation,actuator,data-jpa,flyway,postgresql,testcontainers \
   --output backend-initializr.tgz
 ```
 
@@ -91,10 +90,10 @@ Después de generar la plantilla se:
 - conservó el Maven Wrapper oficial;
 - eliminó la ayuda y configuración de IDE redundantes con la raíz;
 - configuró Spring mediante `application.yml`;
-- marcó la aplicación como monolito modular;
+- organizó el código mediante Feature + Layers;
 - fijó PostgreSQL 18.6 para que las pruebas sean reproducibles;
 - añadió la migración inicial de Flyway;
-- amplió el test de contexto con Actuator, Modulith y base de datos.
+- amplió el test de contexto con Actuator y base de datos.
 
 Verificación:
 
@@ -116,7 +115,7 @@ docker compose up -d postgres
 Luego ejecuta el backend y el frontend en terminales separadas:
 
 ```bash
-mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
+SPRING_PROFILES_ACTIVE=local mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
 ```
 
 ```bash

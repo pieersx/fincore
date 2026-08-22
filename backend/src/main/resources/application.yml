@@ -16,6 +16,27 @@ spring:
         jdbc:
           time_zone: UTC
 
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: strict
+        secure: ${SESSION_COOKIE_SECURE:true}
+      timeout: 30m
+
+fincore:
+  identity:
+    # Una instalación debe habilitar el registro de forma consciente.
+    registration-enabled: ${REGISTRATION_ENABLED:false}
+  transfers:
+    # Límite educativo configurable; FinCore no procesa dinero real.
+    maximum-amount: ${TRANSFER_MAXIMUM_AMOUNT:100000.00}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
 management:
   endpoints:
     web:

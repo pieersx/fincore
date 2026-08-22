@@ -6,7 +6,7 @@
 FinCore es un simulador educativo de core financiero desarrollado para demostrar
 ingeniería backend, arquitectura de software, testing, seguridad, DevOps y cloud.
 
-El sistema comienza como un monolito modular y evoluciona progresivamente hacia
+El sistema comienza como un monolito organizado con **Feature + Layers** y evoluciona hacia
 eventos, servicios independientes, AWS y Kubernetes.
 
 > FinCore utiliza exclusivamente datos sintéticos y no procesa dinero real.
@@ -15,17 +15,18 @@ eventos, servicios independientes, AWS y Kubernetes.
 
 ## Estado del proyecto
 
-FinCore se encuentra en la fase de *walking skeleton*. El backend ya puede
-compilarse, ejecutarse y probarse contra PostgreSQL. El frontend consulta el
-estado del backend; los módulos financieros se incorporarán en incrementos
-posteriores.
+El backend funcional `v1.0.0` está implementado: identidad, clientes, cuentas,
+beneficiarios, transferencias idempotentes, ledger de doble entrada, comprobantes
+PDF, conciliación, auditoría y endpoints por rol. El frontend conserva su
+*walking skeleton* y es el siguiente incremento; después se completará la etapa
+DevOps y despliegue.
 
 ## Objetivo
 
 Construir un producto financiero ficticio que permita demostrar:
 
 - APIs REST con Java y Spring Boot.
-- Diseño modular orientado al dominio.
+- Organización por funcionalidades y capas técnicas claras.
 - Transacciones financieras consistentes.
 - Ledger inmutable de doble entrada.
 - Idempotencia y control de concurrencia.
@@ -36,7 +37,7 @@ Construir un producto financiero ficticio que permita demostrar:
 - Observabilidad.
 - Evolución justificada hacia eventos y microservicios.
 
-## Funcionalidades previstas para v1.0.0
+## Funcionalidades implementadas en el backend v1.0.0
 
 - Usuarios y roles.
 - Clientes ficticios.
@@ -54,22 +55,24 @@ los límites de la primera versión.
 
 ## Arquitectura
 
-La primera versión será una aplicación Spring Boot desplegable como una sola
-unidad y separada internamente en módulos de negocio:
+La primera versión es una aplicación Spring Boot desplegable como una sola
+unidad. Primero agrupa el código por funcionalidad y luego por capa:
 
 ```text
 com.fincore
-|-- identity
-|-- customers
-|-- accounts
-|-- beneficiaries
-|-- transfers
-|-- ledger
-|-- audit
-`-- shared
+|-- identity/{controller,service,repository,entity,dto,mapper}
+|-- customers/{controller,service,repository,entity,dto,mapper}
+|-- accounts/{controller,service,repository,entity,dto,mapper}
+|-- beneficiaries/{controller,service,repository,entity,dto,mapper}
+|-- transfers/{controller,service,repository,entity,dto,mapper}
+|-- ledger/{service,repository,entity,dto}
+|-- audit/{controller,service,repository,entity,dto,mapper}
+|-- onboarding/{controller,service,dto}
+`-- shared/{config,dto,exception,model,security}
 ```
 
-Spring Modulith verificará los límites y dependencias entre módulos.
+Esta organización evita los paquetes globales gigantes de controladores,
+servicios y repositorios, y permite seguir una funcionalidad de extremo a extremo.
 
 Los microservicios no se utilizarán hasta que exista una necesidad técnica
 demostrable.
@@ -78,14 +81,14 @@ demostrable.
 
 | Área | Tecnologías |
 | --- | --- |
-| Backend | Java 21, Spring Boot 4.1, Spring Modulith 2.1 y Maven |
+| Backend | Java 21, Spring Boot 4.1, Feature + Layers y Maven |
 | Persistencia | PostgreSQL 18, Spring Data JPA y Flyway |
-| Seguridad | Spring Security, sesiones seguras y RBAC |
+| Seguridad | Spring Security 7.1, sesiones seguras, CSRF, BCrypt y RBAC |
 | Frontend | React 19.2, TypeScript, Vite y Tailwind CSS |
-| Pruebas | JUnit, ArchUnit, Testcontainers, Vitest y Playwright |
-| DevOps | Docker, GitHub Actions, Trivy, CodeQL y Terraform |
-| Cloud | AWS ECS, RDS, S3, CloudFront, ECR y CloudWatch |
-| Evolución | OpenTelemetry, Kafka y Kubernetes |
+| Pruebas actuales | JUnit, Spring MockMvc y Testcontainers |
+| Frontend actual | React 19.2, TypeScript, Vite, Vitest y Tailwind CSS |
+| DevOps actual | Docker Compose y GitHub Actions |
+| Próximas etapas | UI completa, despliegue, observabilidad, AWS y seguridad CI |
 
 Kafka y Kubernetes pertenecen a etapas posteriores; no son dependencias del
 producto inicial.
@@ -99,7 +102,7 @@ producto inicial.
 | `v0.3.0` | Identidad y clientes |
 | `v0.4.0` | Cuentas y ledger |
 | `v0.5.0` | Transferencias |
-| `v1.0.0` | Monolito modular completo |
+| `v1.0.0` | Monolito Feature + Layers completo |
 | `v1.1.0` | AWS y observabilidad |
 | `v2.0.0` | Transactional outbox y Kafka |
 | `v2.1.0` | Servicio de notificaciones |
@@ -108,6 +111,8 @@ producto inicial.
 ## Documentación
 
 - [Creación inicial con Vite y Spring Initializr](docs/BOOTSTRAP.md).
+- [Guía para entender el backend](docs/BACKEND_GUIDE.md).
+- [Contratos y ejemplos de la API](docs/API.md).
 - [Plan de 10 semanas](docs/PROJECT_PLAN.md).
 - [Alcance de v1.0.0](docs/PRODUCT_SCOPE.md).
 - [Glosario del dominio](docs/DOMAIN_GLOSSARY.md).
@@ -151,7 +156,7 @@ docker compose ps
 Inicia el backend en una terminal:
 
 ```bash
-mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
+SPRING_PROFILES_ACTIVE=local mise exec -- zsh -c 'cd backend && ./mvnw spring-boot:run'
 ```
 
 Inicia el frontend en una segunda terminal:
@@ -170,6 +175,9 @@ migraciones de Flyway durante el arranque.
 Con el backend en ejecución, el frontend estará disponible en
 `http://localhost:5173`. Vite redirige `/actuator` hacia Spring Boot durante el
 desarrollo local.
+
+Las cuentas y credenciales exclusivamente sintéticas para probar los roles se
+encuentran en la [guía de la API](docs/API.md#cuentas-sintéticas-de-demostración).
 
 Las verificaciones locales pueden ejecutarse sin iniciar manualmente PostgreSQL:
 

@@ -55,7 +55,7 @@ Antes de solicitar revisión, el cambio debe:
 
 - Compilar desde un clon limpio usando herramientas versionadas.
 - Incluir pruebas del comportamiento relevante.
-- Mantener válidos los límites del monolito modular.
+- Mantener la separación Feature + Layers y sus dependencias entre capas.
 - No contener secretos ni datos financieros o personales reales.
 - Actualizar README, OpenAPI o ADR cuando el comportamiento o una decisión cambien.
 - Evitar código muerto, paquetes vacíos y comentarios que repitan el código.
