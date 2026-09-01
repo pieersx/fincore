@@ -42,6 +42,13 @@ class FinCoreApplicationTests extends PostgreSQLIntegrationTest {
     }
 
     @Test
+    void readinessEndpointIsPublicForContainerHealthChecks() throws Exception {
+        mockMvc.perform(get("/actuator/health/readiness"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("UP"));
+    }
+
+    @Test
     void infoEndpointIdentifiesTheApplication() throws Exception {
         mockMvc.perform(get("/actuator/info"))
                 .andExpect(status().isOk())
