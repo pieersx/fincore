@@ -36,7 +36,8 @@ class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET,
-                                "/actuator/health",
+                                // Incluye /liveness y /readiness para orquestadores y healthchecks.
+                                "/actuator/health/**",
                                 "/actuator/info",
                                 "/api/v1/auth/csrf",
                                 "/v3/api-docs/**",

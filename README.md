@@ -2,6 +2,7 @@
 
 [![Backend CI](https://github.com/pieersx/fincore/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/pieersx/fincore/actions/workflows/backend-ci.yml)
 [![Frontend CI](https://github.com/pieersx/fincore/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/pieersx/fincore/actions/workflows/frontend-ci.yml)
+[![Container CI](https://github.com/pieersx/fincore/actions/workflows/container-ci.yml/badge.svg)](https://github.com/pieersx/fincore/actions/workflows/container-ci.yml)
 
 FinCore es un simulador educativo de core financiero desarrollado para demostrar
 ingeniería backend, arquitectura de software, testing, seguridad, DevOps y cloud.
@@ -18,7 +19,9 @@ eventos, servicios independientes, AWS y Kubernetes.
 El backend funcional `v1.0.0` y el frontend por roles están implementados:
 identidad, clientes, cuentas, beneficiarios, transferencias idempotentes, ledger
 de doble entrada, comprobantes PDF, conciliación, auditoría y administración.
-El siguiente incremento será completar la etapa DevOps y el despliegue.
+El incremento DevOps local incluye imágenes multi-stage, ejecución sin
+privilegios, Compose de la aplicación completa y escaneo de contenedores en CI.
+El despliegue cloud permanece como una etapa posterior.
 
 ## Objetivo
 
@@ -112,6 +115,7 @@ producto inicial.
 - [Creación inicial con Vite y Spring Initializr](docs/BOOTSTRAP.md).
 - [Guía para entender el backend](docs/BACKEND_GUIDE.md).
 - [Guía para entender el frontend](docs/FRONTEND_GUIDE.md).
+- [Guía DevOps y ejecución con contenedores](docs/DEVOPS_GUIDE.md).
 - [Contratos y ejemplos de la API](docs/API.md).
 - [Plan de 10 semanas](docs/PROJECT_PLAN.md).
 - [Alcance de v1.0.0](docs/PRODUCT_SCOPE.md).
@@ -137,7 +141,23 @@ Las versiones principales están fijadas en `mise.toml` y `package.json`.
 La [guía de creación inicial](docs/BOOTSTRAP.md) explica qué archivos provinieron
 de los generadores oficiales y qué personalizaciones se añadieron a FinCore.
 
-## Ejecutar la aplicación local
+## Ejecutar toda la aplicación con Docker
+
+La forma reproducible ejecuta frontend, backend y PostgreSQL en contenedores:
+
+```bash
+docker compose config --quiet
+docker compose up --build --detach --wait
+docker compose ps
+```
+
+La aplicación queda disponible en `http://localhost:8080`. El backend directo,
+incluido Swagger, queda en `http://localhost:8081/swagger-ui.html`.
+
+Consulta la [guía DevOps](docs/DEVOPS_GUIDE.md) para entender las imágenes,
+redes, healthchecks, controles de seguridad y comandos de diagnóstico.
+
+## Ejecutar desde el código fuente
 
 Instala las herramientas y dependencias una vez:
 
@@ -165,8 +185,8 @@ Inicia el frontend en una segunda terminal:
 pnpm dev:frontend
 ```
 
-Con la aplicación iniciada, el endpoint de salud estará disponible en
-`http://localhost:8080/actuator/health`.
+Con la aplicación iniciada desde el código, el endpoint de salud estará
+disponible en `http://localhost:8080/actuator/health`.
 
 Las pruebas crean una instancia desechable de PostgreSQL mediante Testcontainers.
 La aplicación local utiliza el servicio definido en `compose.yaml` y aplica las
@@ -197,10 +217,12 @@ docker compose down
 
 ## Integración continua
 
-Los workflows `Backend CI` y `Frontend CI` se ejecutan en cada Pull Request
-dirigido a `main` y después de cada push a esa rama. El backend ejecuta
-`./mvnw verify` con Java 21 y PostgreSQL mediante Testcontainers. El frontend
-ejecuta lint, pruebas y build con Node.js 24 y pnpm.
+Los workflows `Backend CI`, `Frontend CI` y `Container CI` se ejecutan en cada
+Pull Request dirigido a `main` y después de cada push a esa rama. El backend
+ejecuta `./mvnw verify` con Java 21 y PostgreSQL mediante Testcontainers. El
+frontend ejecuta lint, pruebas y build con Node.js 24 y pnpm. El workflow de
+contenedores construye ambas imágenes, bloquea vulnerabilidades altas o críticas
+conocidas y realiza una prueba de humo del stack completo.
 
 ## Seguridad
 

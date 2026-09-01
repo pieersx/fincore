@@ -1,0 +1,16 @@
+# El frontend usa la raíz como contexto para acceder al workspace y al lockfile.
+# Excluimos artefactos que no deben viajar al daemon de Docker.
+.git
+.github
+.idea
+.vscode
+backend
+docs
+**/node_modules
+**/dist
+**/target
+**/coverage
+**/*.log
+.env
+.env.*
+!.env.example
