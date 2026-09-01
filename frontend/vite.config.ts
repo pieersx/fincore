@@ -8,6 +8,10 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
       "/actuator": {
         target: "http://localhost:8080",
         changeOrigin: true,
