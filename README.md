@@ -15,11 +15,10 @@ eventos, servicios independientes, AWS y Kubernetes.
 
 ## Estado del proyecto
 
-El backend funcional `v1.0.0` está implementado: identidad, clientes, cuentas,
-beneficiarios, transferencias idempotentes, ledger de doble entrada, comprobantes
-PDF, conciliación, auditoría y endpoints por rol. El frontend conserva su
-*walking skeleton* y es el siguiente incremento; después se completará la etapa
-DevOps y despliegue.
+El backend funcional `v1.0.0` y el frontend por roles están implementados:
+identidad, clientes, cuentas, beneficiarios, transferencias idempotentes, ledger
+de doble entrada, comprobantes PDF, conciliación, auditoría y administración.
+El siguiente incremento será completar la etapa DevOps y el despliegue.
 
 ## Objetivo
 
@@ -85,10 +84,10 @@ demostrable.
 | Persistencia | PostgreSQL 18, Spring Data JPA y Flyway |
 | Seguridad | Spring Security 7.1, sesiones seguras, CSRF, BCrypt y RBAC |
 | Frontend | React 19.2, TypeScript, Vite y Tailwind CSS |
-| Pruebas actuales | JUnit, Spring MockMvc y Testcontainers |
-| Frontend actual | React 19.2, TypeScript, Vite, Vitest y Tailwind CSS |
+| Pruebas | JUnit, Spring MockMvc, Testcontainers, Vitest y Testing Library |
+| Estado del frontend | React Query, rutas protegidas, UI adaptable y cliente API con CSRF |
 | DevOps actual | Docker Compose y GitHub Actions |
-| Próximas etapas | UI completa, despliegue, observabilidad, AWS y seguridad CI |
+| Próximas etapas | Despliegue, observabilidad, AWS y seguridad CI |
 
 Kafka y Kubernetes pertenecen a etapas posteriores; no son dependencias del
 producto inicial.
@@ -112,6 +111,7 @@ producto inicial.
 
 - [Creación inicial con Vite y Spring Initializr](docs/BOOTSTRAP.md).
 - [Guía para entender el backend](docs/BACKEND_GUIDE.md).
+- [Guía para entender el frontend](docs/FRONTEND_GUIDE.md).
 - [Contratos y ejemplos de la API](docs/API.md).
 - [Plan de 10 semanas](docs/PROJECT_PLAN.md).
 - [Alcance de v1.0.0](docs/PRODUCT_SCOPE.md).
@@ -173,11 +173,12 @@ La aplicación local utiliza el servicio definido en `compose.yaml` y aplica las
 migraciones de Flyway durante el arranque.
 
 Con el backend en ejecución, el frontend estará disponible en
-`http://localhost:5173`. Vite redirige `/actuator` hacia Spring Boot durante el
-desarrollo local.
+`http://localhost:5173`. Vite redirige `/api` y `/actuator` hacia Spring Boot
+durante el desarrollo local, por lo que la cookie de sesión funciona con el
+mismo origen visto por el navegador.
 
 Las cuentas y credenciales exclusivamente sintéticas para probar los roles se
-encuentran en la [guía de la API](docs/API.md#cuentas-sintéticas-de-demostración).
+encuentran en la [guía de la API](docs/API.md#datos-sintéticos-locales).
 
 Las verificaciones locales pueden ejecutarse sin iniciar manualmente PostgreSQL:
 
