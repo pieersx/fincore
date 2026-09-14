@@ -205,6 +205,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .sidebar-user p { margin: 0; }
 .avatar { align-items: center; background: #d8ff72; border-radius: 0.7rem; color: #0b2f2a; display: inline-flex; flex: 0 0 auto; font-size: 0.72rem; font-weight: 900; height: 2.4rem; justify-content: center; width: 2.4rem; }
 .logout-button { background: transparent; border: 0; color: #b8cbc6; cursor: pointer; font-size: 0.75rem; font-weight: 900; }
+.theme-toggle { align-items: center; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 0.7rem; color: #d8ff72; cursor: pointer; display: inline-flex; flex: 0 0 auto; font-size: 1.05rem; height: 2.4rem; justify-content: center; line-height: 1; width: 2.4rem; }
+.theme-toggle:hover { background: rgba(255,255,255,.12); }
 .sidebar-backdrop { display: none; }
 .app-content { margin-left: 17rem; min-height: 100vh; }
 .mobile-header { display: none; }
