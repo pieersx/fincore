@@ -2,8 +2,9 @@ import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { useAuth } from "../auth/AuthContext";
+import { useTheme } from "../theme/ThemeContext";
 import type { Role } from "../types/api";
-import { Brand } from "./ui";
+import { Brand, ThemeToggle } from "./ui";
 
 interface NavItem {
   to: string;
@@ -26,6 +27,7 @@ const navigation: NavItem[] = [
 
 export function AppShell() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,7 +46,7 @@ export function AppShell() {
   }
 
   return (
-    <div className="app-frame">
+    <div className="app-frame" data-theme={theme === "dark" ? "dark" : undefined}>
       <aside className={`sidebar ${menuOpen ? "sidebar-open" : ""}`}>
         <div className="sidebar-brand">
           <Brand />
@@ -71,6 +73,7 @@ export function AppShell() {
             <p className="truncate font-black">{user?.username}</p>
             <p className="truncate text-xs text-sidebar-muted">{user?.roles.join(" · ")}</p>
           </div>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
           <button className="logout-button" type="button" disabled={loggingOut} onClick={() => void handleLogout()}>
             {loggingOut ? "…" : "Salir"}
           </button>
