@@ -23,8 +23,12 @@ RUN pnpm build:frontend
 FROM ghcr.io/nginx/nginx-unprivileged:1.31.3-alpine3.24@sha256:f972e5322b9797dc2a6b830030094426437b1ae7032e4644496395336ac6fdac AS runtime
 
 # El digest base aún trae OpenSSL 3.5.7; fijamos la revisión que corrige CVE-2026-14456.
+# También fijamos libexpat y libuuid, que corrigen CVE-2026-76956/76957 y
+# CVE-2026-53612/53613/53614/76642/78408/78409/78410 respectivamente.
 USER root
-RUN apk add --no-cache --upgrade libcrypto3=3.5.8-r0 libssl3=3.5.8-r0
+RUN apk add --no-cache --upgrade \
+    libcrypto3=3.5.8-r0 libssl3=3.5.8-r0 \
+    libexpat=2.8.4-r0 libuuid=2.42.3-r1
 USER 101
 
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
