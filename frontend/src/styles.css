@@ -192,7 +192,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .notice-error { background: var(--color-notice-error-bg); border-color: var(--color-notice-error-border); color: var(--color-notice-error-text); }
 .notice-success { background: var(--color-notice-success-bg); border-color: var(--color-notice-success-border); color: var(--color-notice-success-text); }
 
-.app-frame { min-height: 100vh; }
+.app-frame { background: var(--color-bg); color: var(--color-text); min-height: 100vh; }
 .sidebar { background: #0b2f2a; bottom: 0; color: white; display: flex; flex-direction: column; left: 0; padding: 1.6rem 1.2rem; position: fixed; top: 0; width: 17rem; z-index: 30; }
 .sidebar-brand { align-items: center; display: flex; justify-content: space-between; padding: 0 0.4rem 1.7rem; }
 .sidebar-close { background: transparent; border: 0; color: white; display: none; font-size: 1.7rem; }
