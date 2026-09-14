@@ -3,7 +3,7 @@ id: "001"
 slug: dark-mode-dashboard
 title: "Modo oscuro en la aplicación autenticada"
 mode: light
-status: verified
+status: shipped
 created: 2026-09-13
 branch: feat/001-dark-mode-dashboard
 ---
