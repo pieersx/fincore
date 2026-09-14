@@ -108,13 +108,13 @@ export function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
   return (
     <button
       type="button"
-      className="button-secondary theme-toggle"
+      className="theme-toggle"
       role="switch"
       aria-checked={isDark}
       aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       onClick={onToggle}
     >
-      {isDark ? "Modo oscuro" : "Modo claro"}
+      {isDark ? "☀" : "☾"}
     </button>
   );
 }
