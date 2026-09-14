@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { errorMessage } from "../api/client";
+import type { Theme } from "../theme/ThemeContext";
 
 export function Brand({ compact = false }: { compact?: boolean }) {
   return (
@@ -94,6 +95,27 @@ export function EmptyState({ title, detail }: { title: string; detail: string })
       <p className="font-black">{title}</p>
       <p>{detail}</p>
     </div>
+  );
+}
+
+export interface ThemeToggleProps {
+  theme: Theme;
+  onToggle: () => void;
+}
+
+export function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
+  const isDark = theme === "dark";
+  return (
+    <button
+      type="button"
+      className="button-secondary theme-toggle"
+      role="switch"
+      aria-checked={isDark}
+      aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+      onClick={onToggle}
+    >
+      {isDark ? "Modo oscuro" : "Modo claro"}
+    </button>
   );
 }
 
